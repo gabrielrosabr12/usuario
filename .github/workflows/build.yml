@@ -14,6 +14,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest # Cria um terminal Linux (Ubuntu)
+
+    # 1. Cria um banco de dados PostgreSQL temporário para o teste
+    services:
+      postgres:
+        image: postgres:latest
+        env: 
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
    
     # Passo a passo que vão rodar sequencialmente.
     steps:
@@ -31,5 +48,10 @@ jobs:
       - name: Dar permissão de execução para o Gradle
         run: chmod +x gradlew
 
-      - name: Construir o projeto com Gradle (ignorando testes)
-        run: ./gradlew build -x test
+      - name: # 2. Roda o build COM OS TESTES, passando as variáveis de ambiente
+        env:
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          
+        run: ./gradlew build
