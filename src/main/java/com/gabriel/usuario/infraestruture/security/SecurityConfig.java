@@ -1,4 +1,4 @@
-package com.gabriel.usuario.infraestruture.security.security;
+package com.gabriel.usuario.infraestruture.security;
 
 
 import org.springframework.context.annotation.Bean;
