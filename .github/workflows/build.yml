@@ -48,6 +48,12 @@ jobs:
       - name: Dar permissão de execução para o Gradle
         run: chmod +x gradlew
 
+      - name: Recriar chaves RSA para o Spring Boot
+        run: |
+          mkdir -p src/main/resources/keys
+          echo "${{ secrets.RSA_PRIVATE_KEY_B64 }}" | base64 --decode > src/main/resources/keys/private.pem
+
+
       - name: # 2. Roda o build COM OS TESTES, passando as variáveis de ambiente
         env:
           POSTGRES_USER: ${{secrets.POSTGRES_USER}}
