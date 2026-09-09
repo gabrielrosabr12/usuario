@@ -24,6 +24,8 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core:13.4.0'
     implementation 'org.springframework.boot:spring-boot-starter-flyway:4.1.1'
 	implementation 'org.flywaydb:flyway-database-postgresql:13.4.0'
+    implementation 'org.springframework.security:spring-security-oauth2-client:7.2.0-M1'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.2.0-M1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
