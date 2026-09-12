@@ -36,6 +36,10 @@ public class Users implements UserDetails {
     @JoinColumn(name="role_id")
     private UserRole role;
 
+    @ManyToOne(targetEntity = Adress.class)
+    @JoinColumn(name="id_adress",columnDefinition = "BIGINT")
+    private Adress adress;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
