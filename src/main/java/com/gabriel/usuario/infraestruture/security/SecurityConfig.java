@@ -50,14 +50,8 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-                ;
 
-        return http
-                .csrf(
-                        csrf
-                                -> csrf.disable()).authorizeHttpRequests(auth -> auth.anyRequest().permitAll()).build();
-
-
+        return http.build();
     }
 
     @Bean
