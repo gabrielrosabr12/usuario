@@ -52,7 +52,11 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
                 ;
 
-        return http.build();
+        return http
+                .csrf(
+                        csrf
+                                -> csrf.disable()).authorizeHttpRequests(auth -> auth.anyRequest().permitAll()).build();
+
 
     }
 
