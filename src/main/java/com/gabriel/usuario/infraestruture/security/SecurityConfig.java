@@ -43,8 +43,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {auth
-//                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-//                        .requestMatchers("/admin").hasRole("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/users/create").permitAll()
                         .anyRequest().permitAll();
                 })
                 .sessionManagement(session ->
