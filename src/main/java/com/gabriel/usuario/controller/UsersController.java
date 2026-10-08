@@ -21,8 +21,10 @@ public class UsersController {
 
     @PostMapping("/create")
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO){
-        System.out.println("sajknjkdsajksad");
+        this.userService.createUser(userDTO);
         return ResponseEntity.ok().body(userDTO);
     }
+
+
 
 }
