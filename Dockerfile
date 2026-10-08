@@ -1,24 +1,40 @@
-# 1º Estágio: Baixamos a imagem do gradle com Jdk 25 e apelida como BUILD
-FROM gradle:jdk25 AS BUILD
-# Seleciona o diretório em que será trabalhado
-WORKDIR /usuario
-# Copio tudo que está na pasta atual "/usuario"
-COPY . .
-# Utiliza o comando change mode para adicionar uma permissão de executar no terminal o gradlew
+#1º Container temporário: baixa a imaagem do gradle com jdk25 e apelida como build
+FROM gradle:jdk25 AS build
+
+# Cria uma pasta se não existir de app e entra dentro dela
+WORKDIR /app
+
+# Copia os arquivos de configuração e o script do gradlew para \
+# dentro da pasta que acabamos de criar no container
+COPY ./settings.gradle ./build.gradle ./gradlew ./
+# Copia a pasta do código no computador local para dentro de /app/src no container
+COPY src src
+# Copia a pasta do gradle para dentro da pasta app no container
+COPY gradle gradle
+# Roda o change mode adicionando a permissão de execução do script gradlew
 RUN chmod +x ./gradlew
-# Executa o comando no terminal para compilar o projeto pulando os testes
+# Roda o script gradlew com parametro de baixar as depências do build.gradle mas sem compilar
+# Parametro --no-daemon é para mostrar todo o processo no terminal
+RUN ./gradlew dependencies --no-daemon
+# Roda o script gradlew para compilar o projeto spring e gerar o .jar pulando os testes
 RUN ./gradlew bootJar -x test
 
-# 2º Estágio: Baixamos a imagem do ambiente linux
-FROM eclipse-temurin:25-jre-alpine-3.24
-# Entro novamente dentro de /usuario
-WORKDIR /usuario
-# Copio da pasta do 1º Estagio o snapshot gerado la para o diretorio atual como app
-COPY --from=BUILD /usuario/build/libs/*SNAPSHOT.jar app.jar
-# Exponho a porta 8080
-EXPOSE 8080
-# Defino o autor
-LABEL authors="gabriel_bia"
 
-# Utilizo o java para executar o jar que acabamos de compilar
-ENTRYPOINT ["java", "-jar","app.jar"]
+# 2º Container da aplicacao: Baixa o eclipse temurin pois nela contém o \
+# kit de desenvolvimento java utilizando SO alpine que é super leve
+FROM eclipse-temurin:25-jre-alpine
+
+# Criamos a pasta /app dentro desse container
+WORKDIR /app
+
+# Copiamos la do primeiro container o jar que geramos
+COPY --from=build /app/build/libs/*SNAPSHOT.jar app.jar
+
+# Colocamos etiqueta de autor nesse container
+LABEL authors="gabriel_rosa"
+
+# Colocamos a etiqueta da porta que essa aplicação usa dentro desse container
+EXPOSE 8080
+
+# Execuçaõ da aplicação
+ENTRYPOINT ["java","-jar","app.jar"]

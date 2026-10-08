@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### Project
-private.pem
+src/main/resources/keys/private.pem

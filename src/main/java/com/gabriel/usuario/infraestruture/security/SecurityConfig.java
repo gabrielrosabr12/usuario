@@ -43,17 +43,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {auth
-//                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
-//                        .requestMatchers("/admin").hasRole("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/users/create").permitAll()
                         .anyRequest().permitAll();
                 })
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-                ;
 
         return http.build();
-
     }
 
     @Bean

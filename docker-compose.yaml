@@ -1,0 +1,47 @@
+version: '3.8' # Versão, versão do que?
+
+services:
+  # Serviço 1: Meu banco de dados POSTGRES para api de usuarios
+  meu_postgres:
+    image: postgres:16-alpine # Imagem que será baixada
+    container_name: meu_postgres # Nome do container
+    environment: # Definições de variáveis de ambiente
+      - POSTGRES_DB=meu_db # Nome do banco de dados
+      - POSTGRES_USER=admin # Usuário padrão que será utilizado
+      - POSTGRES_PORT=5432 # Porta do banco de dados
+      - POSTGRES_PASSWORD=1234 # Senha do usuário
+    ports: # Conversão da porta local para do container
+      - "5432:5432"
+
+    # Coloca o banco de dados dentro de uma rede interna do docker para o serviço 2 conseguir acessar
+    networks:
+      - rede-usuarios
+
+  # Serviço 2: Api Spring boot de usuarios
+  usuario-api:
+    # Defino que o build da imagem está na raiz do projeto o Dockerfile
+    build: .
+    container_name: usuario-api # Nome do container
+    # Porta 8080 do pc local será a 8080 do container
+    ports:
+      - "8080:8080"
+    # Variaveis de ambiente dentro desse container
+    environment:
+      - SERVER_PORT=8080
+      - DB_NAME=meu_db
+      - DB_PORT=5432
+      - POSTGRES_DB=meu_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_HOST=meu_postgres
+    # Declaro que esse container precisa que o outro já esteja funcionando
+    depends_on:
+      - meu_postgres
+    # Coloco esse serviço dentro da rede interna do docker
+    networks:
+      - rede-usuarios
+
+# Crio a rede interna do docker com nome de rede-usuarios declarando que o driver será bridge
+networks:
+  rede-usuarios:
+    driver: bridge

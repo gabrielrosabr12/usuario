@@ -1,13 +1,13 @@
 package com.gabriel.usuario.infraestruture.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,7 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Users implements UserDetails {
+@Builder
+public class Users implements UserDetails, CredentialsContainer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +42,32 @@ public class Users implements UserDetails {
     private Adress adress;
 
     @Override
+    public void eraseCredentials() {
+        this.password = null;
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (this.role == null || this.role.getDescription() == null) {
+            return List.of();
+        }
+
+        return switch (this.role.getDescription()) {
+            case "ROLE_ADMIN" -> List.of(
+                    new SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new SimpleGrantedAuthority("ROLE_USER"),
+                    new SimpleGrantedAuthority("ROLE_DEFAULT")
+            );
+            case "ROLE_DEFAULT" -> List.of(
+                    new SimpleGrantedAuthority("ROLE_DEFAULT"),
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+            case "ROLE_USER" -> List.of(
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+
+            default -> List.of();
+        };
     }
 
     @Override
