@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 public class AdressService {
     private final AdressRepository adressRepository;
     private final Converter converter;
-    private final JwtDecoder jwtDecoder;
     private final UsersService usersService;
 
 
@@ -23,7 +22,7 @@ public class AdressService {
     };
 
     public AdressDTO updateAdress(Jwt jwt,AdressDTO adressDTO){
-        this.usersService.validateUser(jwt).booleanValue();
+        this.usersService.validateUser(jwt);
         Adress adress = this.converter.toAdress(adressDTO);
         Adress adressSalvo = this.adressRepository.save(adress);
         return this.converter.toAdressDTO(adressSalvo);

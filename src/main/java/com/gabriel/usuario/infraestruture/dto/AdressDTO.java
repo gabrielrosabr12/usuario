@@ -1,10 +1,8 @@
 package com.gabriel.usuario.infraestruture.dto;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.format.annotation.NumberFormat;
 
 @Builder
 public record AdressDTO(

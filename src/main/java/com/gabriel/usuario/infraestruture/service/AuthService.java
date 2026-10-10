@@ -31,8 +31,7 @@ public class AuthService {
         }
 
         Authentication auth = new UsernamePasswordAuthenticationToken(requestLoginDto.usuario(),null, users.getAuthorities());
-        String token = this.tokenService.generateToken(auth);
-        return token;
+        return this.tokenService.generateToken(auth);
     }
 
 }
