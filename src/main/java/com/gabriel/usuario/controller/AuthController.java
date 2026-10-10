@@ -1,6 +1,6 @@
 package com.gabriel.usuario.controller;
 
-import com.gabriel.usuario.dto.RequestLoginDto;
+import com.gabriel.usuario.infraestruture.dto.RequestLoginDto;
 import com.gabriel.usuario.infraestruture.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

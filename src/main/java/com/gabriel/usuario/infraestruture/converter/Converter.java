@@ -1,7 +1,7 @@
-package com.gabriel.usuario.converter;
+package com.gabriel.usuario.infraestruture.converter;
 
-import com.gabriel.usuario.dto.AdressDTO;
-import com.gabriel.usuario.dto.UserDTOCreate;
+import com.gabriel.usuario.infraestruture.dto.AdressDTO;
+import com.gabriel.usuario.infraestruture.dto.UserDTOCreate;
 import com.gabriel.usuario.infraestruture.entity.Adress;
 import com.gabriel.usuario.infraestruture.entity.Users;
 import org.springframework.stereotype.Component;

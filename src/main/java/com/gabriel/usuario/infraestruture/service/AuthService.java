@@ -1,7 +1,7 @@
 package com.gabriel.usuario.infraestruture.service;
 
 
-import com.gabriel.usuario.dto.RequestLoginDto;
+import com.gabriel.usuario.infraestruture.dto.RequestLoginDto;
 import com.gabriel.usuario.infraestruture.entity.Users;
 import com.gabriel.usuario.infraestruture.exceptions.UserNotFound;
 import com.gabriel.usuario.infraestruture.repository.UserRepository;

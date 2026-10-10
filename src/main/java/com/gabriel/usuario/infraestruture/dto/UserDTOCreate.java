@@ -1,4 +1,4 @@
-package com.gabriel.usuario.dto;
+package com.gabriel.usuario.infraestruture.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
