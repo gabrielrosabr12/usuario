@@ -1,9 +1,9 @@
-package com.gabriel.usuario.service;
+package com.gabriel.usuario.infraestruture.service;
 
-import com.gabriel.usuario.converter.Converter;
-import com.gabriel.usuario.converter.UserMapperUpdater;
-import com.gabriel.usuario.dto.UserDTOCreate;
-import com.gabriel.usuario.dto.UserDTOUpdate;
+import com.gabriel.usuario.infraestruture.converter.Converter;
+import com.gabriel.usuario.infraestruture.converter.UserMapperUpdater;
+import com.gabriel.usuario.infraestruture.dto.UserDTOCreate;
+import com.gabriel.usuario.infraestruture.dto.UserDTOUpdate;
 import com.gabriel.usuario.infraestruture.entity.Adress;
 import com.gabriel.usuario.infraestruture.entity.UserRole;
 import com.gabriel.usuario.infraestruture.entity.Users;
@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UsersService {
@@ -28,6 +30,14 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
     private final AdressService adressService;
     private final UserMapperUpdater userMapperUpdater;
+
+    public Boolean validateUser(Jwt jwt){
+        Optional<Users> users = this.userRepository.findByUsername(jwt.getSubject());
+
+        if (users.isEmpty()) throw new UserNotFound();
+
+        return Boolean.TRUE;
+    }
 
     @Transactional
     public void createUser(UserDTOCreate userDTOCreate){
